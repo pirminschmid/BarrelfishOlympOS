@@ -26,7 +26,7 @@ Exposure to a radically different design than the well known monolithic OS such 
 
 
 # Pandaboard ES
-We could run the system on [Pandaboard ES][pandaboard] boards with TI [OMAP4460][omap4460] SoC providing a 2 core ARMv9 CPU (32 bit). 1 GiB RAM was available. Ubuntu 16.04 LTS was used as development platform with cross-compilation by gcc for ARM and serial port connection with the running board.
+We could run the system on Pandaboard ES boards with TI [OMAP4460][omap4460] SoC providing a 2 core ARMv9 CPU (32 bit). 1 GiB RAM was available. Ubuntu 16.04 LTS was used as development platform with cross-compilation by gcc for ARM and serial port connection with the running board.
 
 
 # Barrelfish OlympOS
@@ -125,7 +125,6 @@ The following licenses apply:
 [aos]:https://www.systems.ethz.ch/courses/fall2017/aos
 [barrelfish]:http://www.barrelfish.org/
 [barrelfish_git]:http://git.barrelfish.org/?p=barrelfish;a=summary
-[pandaboard]:https://www.systems.ethz.ch/sites/default/files/file/aos2017/PandaBoardES.pdf
 [omap4460]:http://www.ti.com/lit/ug/swpu235ab/swpu235ab.pdf
 [greeting_message]:documentation/miscellaneous/greeting_message.md
 [monitor]:documentation/services/monitor.md
