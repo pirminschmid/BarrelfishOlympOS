@@ -11,8 +11,10 @@ This has been a group project in [Advanced Operating Systems (AOS)][aos] in 2017
 # Barrelfish
 [Barrelfish][barrelfish] is a research operating system. It is motivated by trends in hardware design: rapidly growing number of cores and heterogeneous computing resources even in single devices (SoC, CPU, GPU, FPGA). Barrelfish is based on design principles that are fundamentally different to monolithic / hybrid kernel implementations of most frequently run OS today (Linux, macOS, Windows; alphabetical order) and to used micro kernel OS (L4, Mach, Minix<sup>1</sup>).
 
-## Exokernel: CPU driver
-A lightweight exo kernel (CPU driver) is run for each core. Most of the functionality covered inside of monolithic kernels is handled by code running in user space, either in specific services or inside of a Barrelfish/AOS library that is linked to all user programs. As examples, page faults and even actual scheduling of threads are handled by this library. The kernel itself is designed to have amenable properties for reasoning and verification such as: each CPU driver runs on a single core with a single kernel stack, stateless design, no blocking system calls, all interrupts disabled while running CPU driver code. A CPU driver never allocates memory once it is booted and thus cannot run out of memory. CPU drivers can be used in homogeneous and heterogeneous environments: "just" load the proper CPU driver matching the particular computing core.
+## From exokernel to multikernel: CPU drivers
+A lightweight exokernel (CPU driver) is run for each core. Most of the functionality covered inside of monolithic kernels is handled by code running in user space, either in specific services or inside of a Barrelfish/AOS library that is linked to all user programs. As examples, page faults and even actual scheduling of threads are handled by this library. The kernel itself is designed to have amenable properties for reasoning and verification such as: each CPU driver runs on a single core with a single kernel stack, stateless design, no blocking system calls, all interrupts disabled while running CPU driver code. A CPU driver never allocates memory once it is booted and thus cannot run out of memory.
+
+Barrelfish pushes the exokernel concept even more. A separate kernel is run on each core. CPU drivers can be used in homogeneous and heterogeneous environments: "just" load the proper CPU driver matching the particular computing core. Bringing up a new core (see [core spawn][corespawn]) in Barrelfish is basically a case of booting a completely new kernel on that core. Maintaining state of the operating system changes from maintaining state inside of a monolithic system to maintaining state in a distributed system using distributed algorithms instead of local ones. Thus, the architecture of Barrelfish is called a multikernel.
 
 ## Capabilities
 Manipulating the virtual address space inside of the userspace leads to a critical question: How can the system assure that one user space process cannot manipulate the address space of another process (unless desired)? Barrelfish uses a partitioned capabilities system for almost all objects in the system. Capabilities<sup>2</sup> are an old concept in computer science. They are of particular interest because they solve both, the naming problem and the access control problem at the same time.
@@ -22,7 +24,7 @@ Code in user space cannot handle capabilities directly but only references to su
 ## Our tasks using Barrelfish
 We worked on a slightly modified skeleton version of Barrelfish that came without several key components (such as memory management, process spawning, core spawning, message passing, file system, network, name service, shell) for which we had to implement solutions. Due to the fact that most functionality is implemented in user space (including e.g. scheduler), we did not have to modify actual kernel code (CPU driver) except for small bugfixes. We mainly worked in the OS library that gets linked to user space programs; we implemented user space services for the system such as memory, messaging, spawn, process management, etc. Code was implemented in C and little assembly. Barrelfish comes with a nice declarative build system `hake` using Haskell.
 
-Exposure to a radically different design than the well known monolithic OS such as Linux lead to interesting insights and comparisons of these designs (advantages/disadvantages). The project gave first hand experience in solving some of the tricky problems that all OS abstract away in their provided abstraction layers.
+Exposure to a radically different design than the well known monolithic OS such as Linux lead to interesting insights and comparisons of these designs (advantages/disadvantages). The project gave first hand experience in solving some of the tricky problems that all OS abstract away in their provided abstraction layers. Of course, we could only explore a subset of all possible features and usage options of Barrelfish.
 
 
 # Pandaboard ES
@@ -125,6 +127,7 @@ The following licenses apply:
 [aos]:https://www.systems.ethz.ch/courses/fall2017/aos
 [barrelfish]:http://www.barrelfish.org/
 [barrelfish_git]:http://git.barrelfish.org/?p=barrelfish;a=summary
+[corespawn]:documentation/core/corespawn.md
 [omap4460]:http://www.ti.com/lit/ug/swpu235ab/swpu235ab.pdf
 [greeting_message]:documentation/miscellaneous/greeting_message.md
 [monitor]:documentation/services/monitor.md
