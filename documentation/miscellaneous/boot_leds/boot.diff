@@ -1,0 +1,51 @@
+15a16,30
+> /**
+>  * Group C: extended version that blinks LEDs during boot process of 2nd core
+>  * - board starts with LED1 off and LED2 on
+>  * - shortly both LEDs off
+>  * - LED1 on for core 0
+>  * - awakening cores: both LEDs off
+>  * - if not yet for core 1 -> LED1 for core 0
+>  *   if booting core 1 -> both LEDs for both cores
+>  *
+>  * see boot_with_leds_helper.c for the C code used for the LEDs
+>  *
+>  * version 2017-11-10, pisch
+>  */
+> 
+> 
+39a55,61
+>     .extern boot_leds_init
+>     .extern boot_leds_one
+>     .extern boot_leds_two
+>     .extern boot_leds_both
+>     .extern boot_leds_off
+>     .extern boot_leds_wait
+> 
+66c88
+<     bne wait_for_bsp
+---
+>     bne wait_for_bsp_first
+71a94,98
+> 
+> wait_for_bsp_first:
+>     bl boot_leds_init
+>     bl boot_leds_off
+>     bl boot_leds_one
+72a100,102
+>     // show LED1 for core 0 while waiting
+>     bl boot_leds_one
+> 
+76d105
+< 
+79a109,111
+>     // deactivate LEDs while making the decision
+>     bl boot_leds_off
+> 
+81a114,115
+>     mrc p15, 0, r3, c0, c0, 5
+>     and r3, r3, #0xffffff
+85a120,122
+>     // show both LEDs for both cores
+>     bl boot_leds_both
+> 
