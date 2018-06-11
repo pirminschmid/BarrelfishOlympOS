@@ -1,4 +1,4 @@
-# Serializable Key Value store
+# Serializable key value store
 To fulfill the goal of providing rich meta information of the registered services, a key value store was implemented. It is based on an already provided hashtable implementation. Otherwise, already existing solutions would have been searched, or [uthash][uthash] would have been considered as basis.
 
 Our messaging services are designed to send arbitrary binary data of arbitrary length. Thus, serialization and deserialization functions were given to the key value store. This allowed us sending entire stores as reply to queries and/or sending them with initial configuration data or as filters for advanced requests. Of course, the name service API also provided easier lookup functions based on service names without need to build such a store for a query.

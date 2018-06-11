@@ -92,7 +92,7 @@ This semester project allowed us to gain a deeper look behind the curtains of an
 - Lazy evaluation / binding / etc. is often more beneficial than eager solutions.
 - Use good balance of design / anticipation of problems and moving forward -- in particular in thight time constraints. A simple implementation may be all that is needed to get started. An iterative approach keeps a system working at all time.
 - Yes, over-engineering is possible.<sup>3</sup>
-- Good code reviews brings robustness to the system and code knowledge to all.<sup>4</sup>
+- Good code reviews bring robustness to the system and code knowledge to all.<sup>4</sup>
 
 ## Direct links to some code samples
 - [Stacktrace][stacktrace]
