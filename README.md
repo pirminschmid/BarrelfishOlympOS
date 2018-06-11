@@ -78,6 +78,7 @@ Based on this core system, individual projects were implemented by each of us:
 - Filesystem (FAT32)
 - Network (SLIP, IP, ICMP, UDP)
 - [Nameservice][name]
+
 A fifth available project would have been interesting, too: extend the provided limited capabilities system. I describe the nameservice [here][name] that was designed and implemented by myself. It also extended parts of the capabilities system to provide proper capabiltiy transfer between domains running on different cores.
 
 ## Benchmarking

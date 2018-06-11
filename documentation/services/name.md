@@ -18,18 +18,18 @@ Given the limitations of the core system, these additional tasks needed to be ac
 - define minimum number of services that needed to be given to new domains at the "well known locations" in the spawn structure, while all the others could be linked dynamically
 - solve the bootstrapping problem that came with this
 
-It was my personal goal to provide the core functionality of this name service (registration, lookup and binding) as early as possible to my colleages so they could start using it when they aimed at testing the integration of their implementations of network and filesystem. Otherwise, temporary workaround solutions would have been built first.<sup>1</sup>
+It was my personal goal to provide the core functionality of this name service (registration, lookup and binding) as early as possible to my colleages so they could start using it when they aimed at testing the integration of their implementations of network and filesystem. Otherwise, temporary workaround solutions would have to be built first.
 
 ## Namespace
 A hierarchical namespace was established for all services. A service name must adhere to the following rules:
 - Scheme: `/<class>/<type>[/<subtype>]/<enumeration>`
 - a service name is the full absolute path starting with `/`
 - subtype is optional and not used at the moment for the small current system
-- the characters of all `<class>`, `<type>`, `<subtype>` parts must be in {'a'..'z', '0'..'9', '_'}
+- the characters of all `<class>`, `<type>`, `<subtype>` parts must be in `{'a'..'z', '0'..'9', '_'}`
 - `<enumeration>` is a string representation of a valid size_t value and is assigned by the name server upon registration
 
-Additionally, a short name can be used that conforms to the rule `<prefix><enumeration>`. `<enumeration>` is identical to the full name. `<prefix>` can be considered a shortcut for `/<class>/<type>/<subtype>/`. Characters of `<prefix>` must be in {’a’..’z’}
-And finally, services are registered with rich meta data information, that is stored in a serializable key value store and that can also be used for lookup. Keys must be in {’a’..’z’, 0’..’9’, ’_’} with reserved keywords such as class, type, subtype, enumeration, name, short name, which are added during registration. Values are strings.
+Additionally, a short name can be used that conforms to the rule `<prefix><enumeration>`. `<enumeration>` is identical to the full name. `<prefix>` can be considered a shortcut for `/<class>/<type>/<subtype>/`. Characters of `<prefix>` must be in `{'a'..'z'}`
+And finally, services are registered with rich meta data information, that is stored in a serializable key value store and that can also be used for lookup. Keys must be in `{'a'..'z', '0'..'9', '_'}` with reserved keywords such as class, type, subtype, enumeration, name, short name, which are added during registration. Values are strings.
 
 ## Nameserver
 The name service provides data collection about all available services of the system, and most importantly plays the role of a "chaperon" when a domain (user program or service) needs a connection with an already existing service.
@@ -72,7 +72,7 @@ The message system must be able to send capabilities across different cores to a
 ## Distribution of the services
 With all these mechanisms implemented, the services could be moved from monitors to separate domains that were launched, then registered themselves with the name service and were connected only when needed by other services or application programs following the concept of late binding.
 
-The number of provided messaging capabilites during spawn was reduced to 2. Each freshly spawned domain received a messaging endpoint for its monitor (either monitor/0 or monitor/1) and an endpoint for the name service. All other services are connected with late binding.<sup>2</sup>
+The number of provided messaging capabilites during spawn was reduced to 2. Each freshly spawned domain received a messaging endpoint for its monitor (either monitor/0 or monitor/1) and an endpoint for the name service. All other services are connected with late binding.<sup>1</sup>
 
 ## Service bootstrapping
 As soon as all key services are available –- i.e. both monitors, intermon, memory, name and process services -– all new domains can be launched via regular process service RPC call (Demeter). Before this stable situation some specific precautions must be made during the bootstrapping. Gaia e.g. is launched without memory service. It is added later when Dionysos actually registers.
@@ -115,8 +115,7 @@ Together with the very nicely implemented individual projects of my colleagues w
 
 **Footnotes**
 
-1. see also "There is nothing more permanent than a temporary solution." (author?).
-2. The number of provided endpoints could even be reduced to 1, i.e. only the monitor. There could be an additional monitor RPC that could establish a fresh connection with the name service. However, there is no point in minimizing this and put additional messaging strains on the freshly starting domain.
+1. The number of provided endpoints could even be reduced to 1, i.e. only the monitor. There could be an additional monitor RPC that could establish a fresh connection with the name service. However, there is no point in minimizing this and put additional messaging strains on the freshly starting domain.
 
 [core]:../core/core.md
 [messaging]:../core/messaging.md
