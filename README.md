@@ -96,7 +96,7 @@ This semester project allowed us to gain a deeper look behind the curtains of an
 
 ## Direct links to some code samples
 - [Stacktrace][stacktrace]
-- [Lookahead stack allocation][lookahead]
+- [Look-ahead stack allocation][lookahead]
 - [Boot LEDs][boot_leds]
 - [Serializable key value store][serializable_key_value_store]
 

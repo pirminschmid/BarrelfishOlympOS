@@ -8,10 +8,23 @@ It was evident from the code that the actually needed stack size in this critica
 We solved the problem with a simple look-ahead stack allocation just before the dispatcher is disabled. Simply accessing a memory region deeper in the stack may trigger a page fault that is handled by the self-paging algorithm.
 
 ````C
-#define LOOK_AHEAD_DISTANCE_BYTES (BASE_PAGE_SIZE - 1)
-char here = 0;
-volatile char *there = &here - LOOK_AHEAD_DISTANCE_BYTES;
-*there = 0;
+// function from lib/aos/dispatch.c
+// extended by look-ahead stack allocation before disabling the dispatcher
+dispatcher_handle_t disp_disable(void)
+{
+    //--- assure allocated stack of size BASE_PAGE_SIZE ---
+    #define LOOK_AHEAD_DISTANCE_BYTES (BASE_PAGE_SIZE - 1)
+    char here = 0;
+    volatile char *there = &here - LOOK_AHEAD_DISTANCE_BYTES;
+    *there = 0;
+
+    //--- begin critical phase ---
+    dispatcher_handle_t handle = curdispatcher();
+    struct dispatcher_shared_generic* disp = get_dispatcher_shared_generic(handle);
+    assert_disabled(disp->disabled == 0);
+    disp->disabled = 1;
+    return handle;
+}
 ````
 
 As a consequence, at least the defined stack size (here one page) is available before disabling the dispatcher. No crash was observed after this fix. This fix actually worked so well that we used it also at other locations where we did not want to risk self-paging to happen, e.g. in the messaging stack.
